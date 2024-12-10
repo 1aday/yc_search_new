@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { debounce } from 'lodash';
 import styles from "./chat.module.css";
 import { AssistantStream } from "openai/lib/AssistantStream";
 import Markdown from "react-markdown";
@@ -329,6 +330,34 @@ const Chat = ({
     return content;
   };
 
+  // First, create a memoized debounced function
+  const debouncedSetUserInput = useMemo(
+    () =>
+      debounce((value: string) => {
+        setUserInput(value);
+      }, 100) as ReturnType<typeof debounce>,
+    []
+  );
+
+  // Then use it in the callback
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      // Update the input immediately for responsiveness
+      setUserInput(value);
+      // Also trigger the debounced update
+      debouncedSetUserInput(value);
+    },
+    [debouncedSetUserInput]
+  );
+
+  // Clean up the debounced function on unmount
+  useEffect(() => {
+    return () => {
+      debouncedSetUserInput.cancel();
+    };
+  }, [debouncedSetUserInput]);
+
   return (
     <div className={styles.chatContainer}>
       <div className={styles.messages}>
@@ -355,7 +384,7 @@ const Chat = ({
           type="text"
           className={styles.input}
           value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
+          onChange={handleInputChange}
           placeholder="Enter your question"
         />
         <button
