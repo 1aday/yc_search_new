@@ -1,6 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-import { useEffect, useRef } from 'react';
-import mermaid from 'mermaid';
+import { useRef } from 'react';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 
@@ -11,36 +10,8 @@ interface MessageProps {
     id: string;
 }
 
-// Add mermaid initialization at the top of the file
-mermaid.initialize({
-    startOnLoad: false,
-    theme: 'default',
-    securityLevel: 'loose',
-});
-
 export default function Message({ text, role, isStreaming, id }: MessageProps) {
     const contentRef = useRef<HTMLDivElement>(null);
-
-    // Process content to replace Mermaid code blocks with div elements
-    const processedContent = !isStreaming
-        ? text.replace(/```mermaid\n([\s\S]*?)```/g, (_, code) =>
-            `<div class="mermaid">${code}</div>`
-        )
-        : text;
-
-    // Initialize Mermaid diagrams when content updates and streaming is complete
-    useEffect(() => {
-        if (!isStreaming && contentRef.current) {
-            const mermaidElements = contentRef.current.querySelectorAll('.mermaid');
-            if (mermaidElements.length > 0) {
-                try {
-                    mermaid.init(undefined, mermaidElements as NodeListOf<HTMLElement>);
-                } catch (error) {
-                    console.error('Mermaid initialization error:', error);
-                }
-            }
-        }
-    }, [processedContent, isStreaming]);
 
     if (role === 'user') {
         return <div className="userMessage">{text}</div>;
@@ -66,7 +37,7 @@ export default function Message({ text, role, isStreaming, id }: MessageProps) {
                 rehypePlugins={[rehypeRaw as any]}
                 allowDangerousHtml={true}
             >
-                {processedContent}
+                {text}
             </ReactMarkdown>
         </div>
     );
