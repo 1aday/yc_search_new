@@ -34,8 +34,7 @@ export default function Message({ text, role, isStreaming, id }: MessageProps) {
         <div className="assistantMessage" ref={contentRef}>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw as any]}
-                allowDangerousHtml={true}
+                rehypePlugins={[rehypeRaw]}
             >
                 {text}
             </ReactMarkdown>

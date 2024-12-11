@@ -11,7 +11,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <header className={styles.header}>
                 <div className={styles.headerContent}>
                     <h1>
-                        <span>Case</span>
+                        <span>YC</span>
                         <strong>Query</strong>
                     </h1>
                 </div>
@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <main className={styles.main}>{children}</main>
             <footer className={styles.footer}>
                 <div className={styles.footerContent}>
-                    <p>© 2024 CaseQuery</p>
+                    <p>© 2024 YC Query</p>
                 </div>
             </footer>
         </div>
