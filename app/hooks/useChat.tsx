@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { generateUniqueId } from '../utils/helpers';
+import { generateUniqueId, streamMessageContent } from '../utils/helpers';
+
+interface Message {
+    id: string;
+    content: string;
+    isStreaming: boolean;
+}
 
 export function useChat() {
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<Message[]>([]);
 
     function handleNewMessage(content: string) {
         const newMessage = {
             id: generateUniqueId(),
             content: '',
             isStreaming: true,
-            // ... other properties ...
         };
 
         setMessages((prevMessages) => [...prevMessages, newMessage]);
