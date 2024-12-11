@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import Layout from "../components/Layout";
 import styles from "./page.module.css";
 import Chat from "./components/chat";
+import Layout from "./components/Layout";
 
-const Home = () => {
+export default function Home() {
   return (
     <Layout>
       <div className={styles.container}>
@@ -13,6 +13,4 @@ const Home = () => {
       </div>
     </Layout>
   );
-};
-
-export default Home;
+}

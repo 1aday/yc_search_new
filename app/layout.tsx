@@ -43,14 +43,20 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  themeColor: '#FF5722',
+  themeColor: '#FF6B6B',
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const hasRequiredEnvVars = process.env.OPENAI_API_KEY && process.env.ASSISTANT_ID;
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        {assistantId ? children : <Warnings />}
+        {hasRequiredEnvVars ? children : <Warnings />}
       </body>
     </html>
   );
