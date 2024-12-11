@@ -33,8 +33,23 @@ export default function Message({ text, role, isStreaming, id }: MessageProps) {
     return (
         <div className="assistantMessage" ref={contentRef}>
             <ReactMarkdown
+                children={text}
                 remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
+                components={{
+                    // This ensures code blocks are rendered properly
+                    code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '');
+                        return !inline ? (
+                            <pre className={className}>
+                                <code {...props}>{children}</code>
+                            </pre>
+                        ) : (
+                            <code className={className} {...props}>
+                                {children}
+                            </code>
+                        );
+                    }
+                }}
             >
                 {text}
             </ReactMarkdown>
